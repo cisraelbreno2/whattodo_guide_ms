@@ -1,13 +1,13 @@
-package br.com.guild_ms;
+package br.com.guide_ms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GuildMsApplication {
+public class GuideMsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GuildMsApplication.class, args);
+        SpringApplication.run(GuideMsApplication.class, args);
     }
 
 }
