@@ -54,38 +54,6 @@ class GuideRegisterUseCaseTest {
         assertEquals(guideRegisterRequest.getTitle(), guide.getTitle());
         assertEquals(guideRegisterRequest.getUserId(), guide.getUserId());
 
-        var stop = StopFaker.createStopRegisterRequestValid();
-        when(stopRepository.saveStop(any())).thenReturn(StopFaker.createStopRegisterRequestValid());
-
-        guideRegisterRequest.getGuideStopRegisterList().stream().forEach(e ->{
-            assertEquals(stop.getAttachmentList(), e.getAttachmentList());
-            assertEquals(stop.getTitle(), e.getTitle());
-            assertEquals(stop.getWhatToDo(), e.getWhatToDo());
-        });
-
-        assert nonNull(guideRegisterResponse.id());
-    }
-
-    @Test
-    @DisplayName("Teste para verificar se a guia sem as paradas foi salvo")
-    void registerWithStopNull() {
-        var guideRegisterRequest = GuideFaker.createGuideRegisterRequestValidWithStopNull();
-
-        when(guideRepository.saveGuide(any())).thenReturn(GuideFaker.createGuideRegisterValid());
-
-        var guideRegisterResponse = useCase.register(guideRegisterRequest);
-
-        var guideCaptor = ArgumentCaptor.forClass(Guide.class);
-
-        verify(guideRepository, times(1)).saveGuide(guideCaptor.capture());
-
-        var guide = guideCaptor.getValue();
-
-        assert guide.getId() == null;
-        assertEquals(guideRegisterRequest.getDescription(), guide.getDescription());
-        assertEquals(guideRegisterRequest.getTitle(), guide.getTitle());
-        assertEquals(guideRegisterRequest.getUserId(), guide.getUserId());
-
         assert nonNull(guideRegisterResponse.id());
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class GuideStopRegister {
+public class StopRegister {
 
     private String title;
     private String coordinates;
