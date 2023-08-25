@@ -1,40 +1,30 @@
 package br.com.guide_ms.domain.useCase;
 
-import br.com.guide_ms.domain.entity.Guide;
-import br.com.guide_ms.domain.entity.Stop;
 import br.com.guide_ms.domain.entity.factory.GuideFactory;
-import br.com.guide_ms.domain.entity.factory.StopFactory;
+import br.com.guide_ms.domain.exceptions.GuideCreateException;
 import br.com.guide_ms.domain.port.GuideRegisterPort;
 import br.com.guide_ms.domain.port.dto.GuideRegisterRequest;
 import br.com.guide_ms.domain.port.dto.GuideRegisterResponse;
 import br.com.guide_ms.domain.repository.GuideRepository;
-import br.com.guide_ms.domain.repository.StopRepository;
-import br.com.guide_ms.domain.util.ObjectUtils;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import static br.com.guide_ms.domain.util.ObjectUtils.isNullOrEmpty;
 
 @Service
 @AllArgsConstructor
 public class GuideRegisterUseCase implements GuideRegisterPort {
 
     private final GuideRepository guideRepository;
-    private final StopRepository stopRepository;
 
     @Override
     public GuideRegisterResponse register(GuideRegisterRequest guideRegisterRequest) {
-        final var guide = guideRepository.saveGuide(GuideFactory.fromRegisterRequest(guideRegisterRequest));
-
-        if(ObjectUtils.isNotNullOrEmpty(guideRegisterRequest.getGuideStopRegisterList())){
-            var stops = guideRegisterRequest.getGuideStopRegisterList()
-                    .stream()
-                    .map(e -> StopFactory.fromRegisterRequest(e))
-                    .toList();
-            stops.stream().forEach(e -> e.addGuideId(guide.getId()));
-            stopRepository.saveStopList(stops);
+        if(isNullOrEmpty(guideRegisterRequest.getGuideCreatorUserId(), guideRegisterRequest.getUserId(), guideRegisterRequest.getTitle(), guideRegisterRequest.getDescription())){
+            throw new GuideCreateException("O id, titulo ou descrição não podem estar nulos.");
         }
+
+        final var guide = guideRepository.saveGuide(GuideFactory.fromRegisterRequest(guideRegisterRequest));
         return new GuideRegisterResponse(guide.getId(), guide.getTitle());
     }
 }
