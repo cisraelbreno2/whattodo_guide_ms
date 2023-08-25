@@ -1,10 +1,10 @@
-package br.com.guild_ms;
+package br.com.guide_ms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GuildMsApplicationTests {
+class GuideMsApplicationTests {
 
     @Test
     void contextLoads() {
